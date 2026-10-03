@@ -18,6 +18,7 @@ public class SeguroDao {
     public SeguroDao() {
 
     }
+    
     public int agregarSeguro(Seguro seguro) {
         String query = "Insert into seguros(descripcion,idTipo,costoContratacion,costoAsegurado) values('"
                 + seguro.getDescripcion() + "','"
