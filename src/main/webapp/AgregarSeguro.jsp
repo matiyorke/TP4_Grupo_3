@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="dominio.TipoSeguros"%>
+<%@ page import="dao.TipoSegurosDao"%>
+<%@ page import="dao.SeguroDao"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,17 +13,32 @@
 <body>
 <header>
 		<nav>
-			<a href="/Inicio.jsp"> Inicio </a>
-			<a href="/AgregarSeguro.jsp">Agregar Seguros</a>
-			<a href="/ListarSeguros">Listar Seguros</a>
+			<a href="Inicio.jsp"> Inicio </a>
+			<a href="AgregarSeguro.jsp">Agregar Seguros</a>
+			<a href="ListarSeguros">Listar Seguros</a>
 		</nav>
-		
+
 		<h1>Agregar Seguros</h1>
-		
+
+<%
+	TipoSegurosDao tipoSegurosDao = new TipoSegurosDao();
+	ArrayList<TipoSeguros> listaTipos = tipoSegurosDao.obtenerTodosLosTipos();
+
+	SeguroDao seguroDao = new SeguroDao();
+	int proximoId = seguroDao.obtenerProximoId();
+
+	String mensaje = (String) request.getAttribute("mensaje");
+%>
+
+<% if (mensaje != null && !mensaje.equals("")) { %>
+	<p><%= mensaje %></p>
+<% } %>
+
 		<form method="post" action="servletSeguro">
         <table>
             <tr>
-                <td>Id Seguro:</td>                
+                <td>Id Seguro:</td>
+                <td><%= proximoId %></td>
             </tr>
             <tr>
                 <td>Descripción:</td>
@@ -29,7 +48,14 @@
                 <td>Tipo de Seguro:</td>
                 <td>
                     <select name="ddlTipoSeguro">
-                       
+<%
+	for (int i = 0; i < listaTipos.size(); i++) {
+		TipoSeguros tipo = listaTipos.get(i);
+%>
+                       <option value="<%= tipo.getIdTipo() %>"><%= tipo.getDescripcion() %></option>
+<%
+	}
+%>
                     </select>
                 </td>
             </tr>
@@ -47,7 +73,7 @@
             </tr>
         </table>
     </form>
-		
+
 </header>
 </body>
 </html>
