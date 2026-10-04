@@ -130,6 +130,36 @@ public class SeguroDao {
         return lSeguro;
     }
 
+    public ArrayList<Seguro> obtenerSegurosPorTipo(int idTipo) {
+        ArrayList<Seguro> lSeguro = new ArrayList<Seguro>();
+
+        Connection cn = null;
+
+        try {
+            cn = DriverManager.getConnection(host + dbName, user, pass);
+            String query = "Select * from seguros where idTipo=" + idTipo;
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                Seguro x = new Seguro();
+
+                x.setIdSeguro(rs.getInt("idSeguro"));
+                x.setDescripcion(rs.getString("descripcion"));
+                x.setIdTipo(rs.getInt("idTipo"));
+                x.setCostoContratacion(rs.getDouble("costoContratacion"));
+                x.setCostoAsegurado(rs.getDouble("costoAsegurado"));
+
+                lSeguro.add(x);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return lSeguro;
+    }
+
     public int obtenerProximoId() {
         int proximoId = 1;
 

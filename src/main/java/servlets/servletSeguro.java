@@ -7,9 +7,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import dao.SeguroDao;
+import dao.TipoSegurosDao;
 import dominio.Seguro;
+import dominio.TipoSeguros;
 
 @WebServlet("/servletSeguro")
 public class servletSeguro extends HttpServlet {
@@ -19,7 +22,28 @@ public class servletSeguro extends HttpServlet {
 		super();
 	}
 
+	private void cargarDatos(HttpServletRequest request) {
+		TipoSegurosDao tipoSegurosDao = new TipoSegurosDao();
+		ArrayList<TipoSeguros> listaTipos = tipoSegurosDao.obtenerTodosLosTipos();
+
+		SeguroDao seguroDao = new SeguroDao();
+		int proximoId = seguroDao.obtenerProximoId();
+
+		request.setAttribute("listaTipos", listaTipos);
+		request.setAttribute("proximoId", proximoId);
+	}
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String accion = request.getParameter("accion");
+
+		if ("listar".equals(accion)) {
+			RequestDispatcher rd = request.getRequestDispatcher("ListarSeguros.jsp");
+			rd.forward(request, response);
+			return;
+		}
+
+		cargarDatos(request);
+
 		RequestDispatcher rd = request.getRequestDispatcher("AgregarSeguro.jsp");
 		rd.forward(request, response);
 	}
@@ -49,9 +73,14 @@ public class servletSeguro extends HttpServlet {
 				seguro.setCostoAsegurado(costoMaximo);
 
 				SeguroDao dao = new SeguroDao();
-				dao.agregarSeguro(seguro);
+				int filas = dao.agregarSeguro(seguro);
 
-				mensaje = "Seguro agregado con éxito";
+				if (filas == 1) {
+					mensaje = "Seguro agregado con éxito";
+				}
+				else {
+					mensaje = "No se pudo agregar el seguro.";
+				}
 			}
 		}
 		catch (NumberFormatException e) {
@@ -59,6 +88,7 @@ public class servletSeguro extends HttpServlet {
 		}
 
 		request.setAttribute("mensaje", mensaje);
+		cargarDatos(request);
 
 		RequestDispatcher rd = request.getRequestDispatcher("AgregarSeguro.jsp");
 		rd.forward(request, response);

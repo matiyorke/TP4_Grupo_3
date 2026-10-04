@@ -10,8 +10,8 @@
 
 <nav>
 	<a href="Inicio.jsp"> Inicio </a>
-	<a href="AgregarSeguro.jsp">Agregar Seguros</a>
-	<a href="ListarSeguros">Listar Seguros</a>
+	<a href="servletSeguro">Agregar Seguros</a>
+	<a href="servletSeguro?accion=listar">Listar Seguros</a>
 </nav>
 
 	<h1>Listado de Seguros</h1>

@@ -2,8 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="dominio.TipoSeguros"%>
-<%@ page import="dao.TipoSegurosDao"%>
-<%@ page import="dao.SeguroDao"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,18 +12,15 @@
 <header>
 		<nav>
 			<a href="Inicio.jsp"> Inicio </a>
-			<a href="AgregarSeguro.jsp">Agregar Seguros</a>
-			<a href="ListarSeguros">Listar Seguros</a>
+			<a href="servletSeguro">Agregar Seguros</a>
+			<a href="servletSeguro?accion=listar">Listar Seguros</a>
 		</nav>
 
 		<h1>Agregar Seguros</h1>
 
 <%
-	TipoSegurosDao tipoSegurosDao = new TipoSegurosDao();
-	ArrayList<TipoSeguros> listaTipos = tipoSegurosDao.obtenerTodosLosTipos();
-
-	SeguroDao seguroDao = new SeguroDao();
-	int proximoId = seguroDao.obtenerProximoId();
+	ArrayList<TipoSeguros> listaTipos = (ArrayList<TipoSeguros>) request.getAttribute("listaTipos");
+	int proximoId = (Integer) request.getAttribute("proximoId");
 
 	String mensaje = (String) request.getAttribute("mensaje");
 %>
