@@ -5,8 +5,14 @@
 <meta charset="UTF-8">
 <title>Inicio</title>
 </head>
-<body>
-	<%@ include file="menu.jsp" %>
+<body>	
+	<header>
+		<nav>
+			<a href="/inicio.jsp"> Inicio </a>
+			<a href="/AgregarSeguro.jsp">Agregar Seguros</a>
+			<a href="/ListarSeguros">Listar Seguros</a>
+		</nav>
+	</header>
 	<h2>Soy la página inicio</h2>
 </body>
 </html>
