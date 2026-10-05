@@ -35,10 +35,35 @@ public class servletSeguro extends HttpServlet {
 	
 	private void cargarListado(HttpServletRequest request) {
 		SeguroDao seguroDao = new SeguroDao();
-		ArrayList<Seguro> listaS = seguroDao.obtenerTodosLosSeguros();
-		request.setAttribute("listaS", listaS);
-	}
+	    ArrayList<Seguro> listaS = seguroDao.obtenerTodosLosSeguros();
 
+	    TipoSegurosDao tipoSegurosDao = new TipoSegurosDao();
+	    ArrayList<TipoSeguros> listaTipos = tipoSegurosDao.obtenerTodosLosTipos();
+
+	    request.setAttribute("listaS", listaS);
+	    request.setAttribute("listaTipos", listaTipos);
+	}
+	
+	private void cargarListadoFiltrado(HttpServletRequest request) {
+
+	    int idTipo = Integer.parseInt(
+	        request.getParameter("filtradoSeguros")
+	    );
+
+	    SeguroDao seguroDao = new SeguroDao();
+
+	    ArrayList<Seguro> listaS =
+	        seguroDao.obtenerSegurosPorTipo(idTipo);
+
+	    TipoSegurosDao tipoSegurosDao = new TipoSegurosDao();
+
+	    ArrayList<TipoSeguros> listaTipos =
+	        tipoSegurosDao.obtenerTodosLosTipos();
+
+	    request.setAttribute("listaS", listaS);
+	    request.setAttribute("listaTipos", listaTipos);
+	}
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String accion = request.getParameter("accion");
 
@@ -56,19 +81,31 @@ public class servletSeguro extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		String descripcion = request.getParameter("txtDescripcion");
-		String idTipoStr = request.getParameter("ddlTipoSeguro");
-		String costoContratacionStr = request.getParameter("txtCostoContratacion");
-		String costoMaximoStr = request.getParameter("txtCostoMaximo");
-		
+		// MOSTRAR TODO
 		if (request.getParameter("btnMostrarTodos") != null) {
 			cargarListado(request);
 			RequestDispatcher rd = request.getRequestDispatcher("ListarSeguros.jsp");
 			rd.forward(request, response);
 			return;
 		}
+		// FILTRAR
+        if (request.getParameter("btnFiltrar") != null) {
 
+            cargarListadoFiltrado(request);
+
+            RequestDispatcher rd =
+                request.getRequestDispatcher("ListarSeguros.jsp");
+
+            rd.forward(request, response);
+
+            return;
+        }
+		
+		String descripcion = request.getParameter("txtDescripcion");
+		String idTipoStr = request.getParameter("ddlTipoSeguro");
+		String costoContratacionStr = request.getParameter("txtCostoContratacion");
+		String costoMaximoStr = request.getParameter("txtCostoMaximo");
+	
 		String mensaje = "";
 
 		try {

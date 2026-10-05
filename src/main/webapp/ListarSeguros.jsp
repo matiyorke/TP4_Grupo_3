@@ -1,5 +1,7 @@
 <%@page import="dominio.Seguro"%>
 <%@page import="java.util.ArrayList"%>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="dominio.TipoSeguros"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -17,9 +19,29 @@
 </nav>
 
 	<h1>Listado de Seguros</h1>
+		<%ArrayList<TipoSeguros> listaTipos = null;
 
+	    if (request.getAttribute("listaTipos") != null) {
+	        listaTipos = (ArrayList<TipoSeguros>) request.getAttribute("listaTipos");
+	    }
+		%>
 		<form method="post" action="servletSeguro">
-		Filtrar por tipo: <select name="filtradoSeguros"></select>
+		Filtrar por tipo: <select name="filtradoSeguros">
+		<%
+            for (TipoSeguros tipo : listaTipos) {
+        %>
+        
+        <option value="<%= tipo.getIdTipo() %>">
+                <%= tipo.getDescripcion() %>
+            </option>
+
+        <%
+            }
+        %>
+        
+        </select>
+        
+        
 		<input type="submit" value= "Filtrar" name="btnFiltrar"/>
 		<input type="submit" value= "Mostrar todos" name="btnMostrarTodos"/>
 	</form>
@@ -37,18 +59,29 @@
 	<tr>
 		<th>ID seguro</th> <th>Descripción</th> <th>Tipo de seguro</th> <th>Costo contratación</th> <th>Costo Máx. Asegurado</th>
 		</tr>
-		<% for(Seguro seg : listadeseguros){%>
-		<tr>
-		    <td><%= seg.getIdSeguro() %></td>
-			<td><%= seg.getDescripcion() %></td>
-			<td><%= seg.getIdTipo() %></td>
-			<td><%= seg.getCostoContratacion() %></td>
-			<td><%= seg.getCostoAsegurado() %></td>
-	    </tr>
-		<%} %>
+		
 	</thead>
 	<tbody>
-	
+		<%
+            if (listadeseguros != null) {
+
+                for (Seguro seg : listadeseguros) {
+        %>
+
+        <tr>
+            <td><%= seg.getIdSeguro() %></td>
+            <td><%= seg.getDescripcion() %></td>
+            <td><%= seg.getIdTipo() %></td>
+            <td><%= seg.getCostoContratacion() %></td>
+            <td><%= seg.getCostoAsegurado() %></td>
+        </tr>
+
+        <%
+                }
+            }
+        %>
+
+    </tbody>
 	</tbody>
 	
 	</table>
