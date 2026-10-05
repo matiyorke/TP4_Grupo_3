@@ -16,7 +16,11 @@ public class SeguroDao {
     private String dbName = "SegurosGroup";
 
     public SeguroDao() {
-
+    	  try {
+    	        Class.forName("com.mysql.cj.jdbc.Driver");
+    	    } catch (ClassNotFoundException e) {
+    	        e.printStackTrace();
+    	    }
     }
     
     public int agregarSeguro(Seguro seguro) {

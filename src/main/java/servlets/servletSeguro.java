@@ -32,11 +32,18 @@ public class servletSeguro extends HttpServlet {
 		request.setAttribute("listaTipos", listaTipos);
 		request.setAttribute("proximoId", proximoId);
 	}
+	
+	private void cargarListado(HttpServletRequest request) {
+		SeguroDao seguroDao = new SeguroDao();
+		ArrayList<Seguro> listaS = seguroDao.obtenerTodosLosSeguros();
+		request.setAttribute("listaS", listaS);
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String accion = request.getParameter("accion");
 
 		if ("listar".equals(accion)) {
+			cargarListado(request);
 			RequestDispatcher rd = request.getRequestDispatcher("ListarSeguros.jsp");
 			rd.forward(request, response);
 			return;
@@ -54,6 +61,13 @@ public class servletSeguro extends HttpServlet {
 		String idTipoStr = request.getParameter("ddlTipoSeguro");
 		String costoContratacionStr = request.getParameter("txtCostoContratacion");
 		String costoMaximoStr = request.getParameter("txtCostoMaximo");
+		
+		if (request.getParameter("btnMostrarTodos") != null) {
+			cargarListado(request);
+			RequestDispatcher rd = request.getRequestDispatcher("ListarSeguros.jsp");
+			rd.forward(request, response);
+			return;
+		}
 
 		String mensaje = "";
 

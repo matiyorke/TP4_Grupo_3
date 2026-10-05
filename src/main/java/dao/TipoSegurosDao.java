@@ -16,7 +16,11 @@ public class TipoSegurosDao {
 	private String dbName = "SegurosGroup";
 
 	public TipoSegurosDao() {
-
+		 try {
+		        Class.forName("com.mysql.cj.jdbc.Driver");
+		    } catch (ClassNotFoundException e) {
+		        e.printStackTrace();
+		    }
 	}
 
 	public ArrayList<TipoSeguros> obtenerTodosLosTipos() {
