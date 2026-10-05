@@ -71,7 +71,18 @@
         <tr>
             <td><%= seg.getIdSeguro() %></td>
             <td><%= seg.getDescripcion() %></td>
-            <td><%= seg.getIdTipo() %></td>
+            <td>
+            <%
+	        for (TipoSeguros tipo : listaTipos) {
+	            if (tipo.getIdTipo() == seg.getIdTipo()) {
+	    	%>
+	        <%= tipo.getDescripcion() %>
+	    	<%
+		            }
+		        }
+	    	%>
+            
+            </td>
             <td><%= seg.getCostoContratacion() %></td>
             <td><%= seg.getCostoAsegurado() %></td>
         </tr>
